@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+
+sudo tee /etc/wsl.conf >/dev/null <<'EOF'
+[boot]
+systemd=true
+
+[automount]
+options = "metadata"
+
+[user]
+default={{ .chezmoi.username }}
+EOF
