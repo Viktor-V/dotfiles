@@ -9,7 +9,7 @@ config.color_scheme = 'Dracula (Official)'
 config.window_background_opacity = 0.9
 config.text_background_opacity = 0.8
 config.window_decorations = 'RESIZE'
-config.hide_tab_bar_if_only_one_tab = true
+config.enable_tab_bar = false
 
 wezterm.on('gui-startup', function(cmd)
   local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
