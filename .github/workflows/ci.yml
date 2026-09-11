@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lua5.4 shellcheck
+          sudo sh -c "$(curl -fsLS get.chezmoi.io)"
+
+      - name: Check Lua configs
+        run: |
+          for f in $(find . -name '*.lua'); do
+            echo "Checking $f"
+            luac5.4 -p "$f"
+          done
+
+      - name: Check shell script templates
+        run: |
+          for f in $(find . -name '*.sh.tmpl'); do
+            echo "Checking $f"
+            chezmoi execute-template -f "$f" > /tmp/rendered.sh
+            sh -n /tmp/rendered.sh
+            shellcheck /tmp/rendered.sh
+          done
