@@ -14,7 +14,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y lua5.4 shellcheck
-          sudo sh -c "$(curl -fsLS get.chezmoi.io)"
+          sudo curl -fsSL -o /usr/local/bin/chezmoi https://github.com/twpayne/chezmoi/releases/latest/download/chezmoi-linux-amd64
+          sudo chmod +x /usr/local/bin/chezmoi
+          chezmoi --version
 
       - name: Check Lua configs
         run: |
