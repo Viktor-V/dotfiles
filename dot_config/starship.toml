@@ -1,6 +1,6 @@
 palette = "catppuccin_macchiato"
 format = "$directory$character"
-right_format = "$git_branch$git_status$cmd_duration"
+right_format = "$git_branch$git_commit$git_state$git_status$cmd_duration"
 add_newline = true
 
 [palettes.catppuccin_macchiato]
@@ -38,12 +38,39 @@ error_symbol = "[❯](red)"
 vimcmd_symbol = "[❮](mauve)"
 
 [git_branch]
-symbol = " "
-style = "lavender"
+symbol = " "
+format = "on [$symbol$branch]($style) "
+style = "bold mauve"
+truncation_length = 32
+truncation_symbol = "…"
+
+[git_commit]
+commit_hash_length = 7
+format = '[($hash$tag)]($style) '
+style = "bold teal"
+only_detached = true
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bold yellow"
 
 [git_status]
-style = "pink"
+format = '([\[$all_status$ahead_behind\]]($style) )'
+style = "bold pink"
+conflicted = '≠${count}'
+stashed = '≡${count}'
+deleted = '✘${count}'
+renamed = '»${count}'
+modified = '●${count}'
+typechanged = '~${count}'
+staged = '+${count}'
+untracked = '?${count}'
+ahead = '⇡${count}'
+behind = '⇣${count}'
+diverged = '⇕⇡${ahead_count}⇣${behind_count}'
+up_to_date = ""
 
 [cmd_duration]
 min_time = 2000
-style = "overlay1"
+format = 'took [$duration]($style) '
+style = "italic overlay1"
