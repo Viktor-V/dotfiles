@@ -13,7 +13,10 @@ local tab_style = 'square'
 local leader_prefix = utf8.char(0x1f30a)
 
 -- Keep (user)
-config.default_domain = 'WSL:Debian'
+-- WSL domain only exists on Windows; guard it so the same config works on Linux/macOS
+if wezterm.target_triple:find('windows') then
+  config.default_domain = 'WSL:Debian'
+end
 config.font = wezterm.font('JetBrainsMono NF')
 config.font_size = 14.0
 config.window_close_confirmation = 'NeverPrompt'
