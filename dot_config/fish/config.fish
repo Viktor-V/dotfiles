@@ -47,16 +47,19 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
-# WSL specific
-alias winhome='cd /mnt/c/Users/viktorv'
+# WSL specific (only define when Windows drives are mounted)
+if test -d /mnt/c
+    alias winhome='cd /mnt/c/Users/viktorv'
+end
 alias desk='cd ~/Desktop 2>/dev/null || mkdir -p ~/Desktop && cd ~/Desktop'
 
 # Set default editor
 set -gx EDITOR nvim
 set -gx VISUAL nvim
 
-# PATH additions
+# PATH additions (missing dirs are ignored, so this is safe on all OSes)
 fish_add_path $HOME/.local/bin
+fish_add_path /opt/homebrew/bin
 fish_add_path /usr/local/bin
 fish_add_path /usr/local/go/bin
 
