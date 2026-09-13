@@ -60,7 +60,7 @@
   "SettingWindowState": 0,
   "ShowPlaceholder": true,
   "PlaceholderText": "",
-  "ShowHomePage": true,
+  "ShowHomePage": false,
   "ShowHistoryResultsForHomePage": false,
   "MaxHistoryResultsToShowForHomePage": 5,
   "AutoRestartAfterChanging": false,
@@ -145,7 +145,7 @@
   "AlwaysPreview": false,
   "AlwaysStartEn": false,
   "QuerySearchPrecision": "Regular",
-  "AutoUpdates": false,
+  "AutoUpdates": true,
   "WindowLeft": 670,
   "WindowTop": 248,
   "PreviousScreenWidth": 0,
@@ -161,7 +161,7 @@
   "CustomShortcuts": [],
   "DontPromptUpdateMsg": false,
   "EnableUpdateLog": false,
-  "StartFlowLauncherOnSystemStartup": false,
+  "StartFlowLauncherOnSystemStartup": true,
   "UseLogonTaskForStartup": false,
   "HideOnStartup": true,
   "HideNotifyIcon": false,
@@ -171,7 +171,7 @@
   "ShowAtTopmost": false,
   "SearchQueryResultsWithDelay": false,
   "SearchDelayTime": 150,
-  "SearchWindowScreen": "Cursor",
+  "SearchWindowScreen": "Primary",
   "SearchWindowAlign": "Center",
   "CustomScreenNumber": 1,
   "IgnoreHotkeysOnFullscreen": false,
@@ -198,7 +198,7 @@
         ],
         "Priority": 0,
         "SearchDelayTime": null,
-        "Disabled": false,
+        "Disabled": true,
         "HomeDisabled": false
       },
       "CEA0FDFC6D3B4085823D60DC76F28855": {
@@ -210,7 +210,7 @@
         ],
         "Priority": 0,
         "SearchDelayTime": null,
-        "Disabled": false,
+        "Disabled": true,
         "HomeDisabled": false
       },
       "572be03c74c642baae319fc283e561a8": {
@@ -238,7 +238,7 @@
         ],
         "Priority": 0,
         "SearchDelayTime": null,
-        "Disabled": false,
+        "Disabled": true,
         "HomeDisabled": false
       },
       "9f8f9b14-2518-4907-b211-35ab6290dee7": {
@@ -250,7 +250,7 @@
         ],
         "Priority": 0,
         "SearchDelayTime": null,
-        "Disabled": false,
+        "Disabled": true,
         "HomeDisabled": false
       },
       "b64d0a79-329a-48b0-b53f-d658318a1bf6": {
@@ -262,7 +262,7 @@
         ],
         "Priority": 0,
         "SearchDelayTime": null,
-        "Disabled": false,
+        "Disabled": true,
         "HomeDisabled": false
       },
       "791FC278BA414111B8D1886DFE447410": {
@@ -286,7 +286,7 @@
         ],
         "Priority": 0,
         "SearchDelayTime": null,
-        "Disabled": false,
+        "Disabled": true,
         "HomeDisabled": false
       },
       "CEA08895D2544B019B2E9C5009600DF4": {
@@ -310,7 +310,7 @@
         ],
         "Priority": 0,
         "SearchDelayTime": null,
-        "Disabled": false,
+        "Disabled": true,
         "HomeDisabled": false
       },
       "565B73353DBF4806919830B9202EE3BF": {
@@ -342,7 +342,7 @@
         ],
         "Priority": 0,
         "SearchDelayTime": 450,
-        "Disabled": false,
+        "Disabled": true,
         "HomeDisabled": false
       },
       "5043CETYU6A748679OPA02D27D99677A": {
