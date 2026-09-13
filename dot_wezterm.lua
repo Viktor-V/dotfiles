@@ -13,9 +13,37 @@ local tab_style = 'square'
 local leader_prefix = utf8.char(0x1f30a)
 
 -- Keep (user)
--- WSL domain only exists on Windows; guard it so the same config works on Linux/macOS
+-- On Windows, default to the actual default WSL distribution (the one marked
+-- with '*' in `wsl -l -v`), then Debian, then any other installed distro.
+-- Never point at a missing domain. On Linux/macOS (or with no WSL distros
+-- at all) WezTerm falls back to the local domain.
 if wezterm.target_triple:find('windows') then
-  config.default_domain = 'WSL:Debian'
+  local wsl_names = {}
+  for _, dom in ipairs(wezterm.default_wsl_domains()) do
+    wsl_names[dom.distribution] = dom.name
+  end
+
+  local want = { 'Debian' }
+  local ok, out = wezterm.run_child_process({ 'wsl.exe', '-l', '-v' })
+  if ok and out and #out > 0 then
+    local default_distro = wezterm.utf16_to_utf8(out):match('%*%s*(%S+)')
+    if default_distro then
+      table.insert(want, 1, default_distro)
+    end
+  end
+
+  for _, distro in ipairs(want) do
+    if wsl_names[distro] then
+      config.default_domain = wsl_names[distro]
+      break
+    end
+  end
+  if config.default_domain == nil then
+    for _, name in pairs(wsl_names) do
+      config.default_domain = name
+      break
+    end
+  end
 end
 config.font = wezterm.font('JetBrainsMono NF')
 config.font_size = 14.0
