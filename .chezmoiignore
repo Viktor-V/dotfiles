@@ -1,3 +1,8 @@
 .github/
 README.md
 LICENSE
+{{ if ne .chezmoi.os "windows" }}
+AppData/
+{{ else }}
+install-wsl.conf.sh
+{{ end }}
