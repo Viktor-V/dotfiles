@@ -23,7 +23,7 @@
   "Theme": "Catppuccin Macchiato",
   "UseDropShadowEffect": true,
   "BackdropType": 1,
-  "ReleaseNotesVersion": "2.1.3",
+  "ReleaseNotesVersion": "2.1.4",
   "WindowHeightSize": 42,
   "ItemHeightSize": 58,
   "QueryBoxFontSize": 16,
@@ -64,8 +64,8 @@
   "ShowHistoryResultsForHomePage": false,
   "MaxHistoryResultsToShowForHomePage": 5,
   "AutoRestartAfterChanging": false,
-  "ShowUnknownSourceWarning": true,
-  "AutoUpdatePlugins": true,
+  "ShowUnknownSourceWarning": false,
+  "AutoUpdatePlugins": false,
   "CustomExplorerIndex": 0,
   "CustomExplorerList": [
     {
@@ -145,7 +145,7 @@
   "AlwaysPreview": false,
   "AlwaysStartEn": false,
   "QuerySearchPrecision": "Regular",
-  "AutoUpdates": true,
+  "AutoUpdates": false,
   "WindowLeft": 670,
   "WindowTop": 248,
   "PreviousScreenWidth": 0,
