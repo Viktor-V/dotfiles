@@ -4,6 +4,7 @@ LICENSE
 {{ if ne .chezmoi.os "windows" }}
 AppData/
 .glzr/
+configure-windows.ps1
 {{ else }}
 install-wsl.conf.sh
 {{ end }}

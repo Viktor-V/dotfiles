@@ -10,6 +10,7 @@ The idea is simple: sit down at a fresh machine (Linux, macOS, or Windows) and g
 - **fish** with Catppuccin Macchiato colors, vi key bindings, and zoxide / atuin integration
 - **Starship** single-line prompt with compact git info on the right (branch, stash, status counts, ahead/behind)
 - **GlazeWM** tiling window manager with Catppuccin Macchiato borders and i3-style `alt` keybindings
+- **Windows shell** with hidden desktop icons and an auto-hide taskbar
 - **WSL2** via `/etc/wsl.conf` with the `metadata` mount for seamless Windows and WSL file permissions
 
 ## Install
