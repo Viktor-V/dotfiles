@@ -230,7 +230,6 @@ wezterm.on('gui-startup', function(cmd)
   docker_tab:set_title('shell')
 
   wezterm.mux.set_active_workspace('work')
-  work:gui_window():toggle_fullscreen()
 end)
 
 return config

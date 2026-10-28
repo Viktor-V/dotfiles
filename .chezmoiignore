@@ -3,6 +3,7 @@ README.md
 LICENSE
 {{ if ne .chezmoi.os "windows" }}
 AppData/
+.glzr/
 {{ else }}
 install-wsl.conf.sh
 {{ end }}
