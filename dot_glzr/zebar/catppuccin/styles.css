@@ -1,0 +1,249 @@
+@import url('https://www.nerdfonts.com/assets/css/webfont.css');
+
+:root {
+  --text-size: 12px;
+  --icon-size: 12px;
+
+  --crust: #181926;
+  --mantle: #1e2030;
+  --base: #24273a;
+  --surface0: #363a4f;
+  --surface1: #494d64;
+  --surface2: #5b6078;
+  --overlay0: #6e738d;
+  --overlay1: #8087a2;
+  --subtext0: #a5adce;
+  --subtext1: #b8c0e0;
+  --text: #cad3f5;
+  --lavender: #b7bdf8;
+  --blue: #8aadf4;
+  --sapphire: #7dc4e4;
+  --sky: #91d7e3;
+  --teal: #8bd5ca;
+  --green: #a6da95;
+  --yellow: #eed49f;
+  --peach: #f5a97f;
+  --maroon: #ee99a0;
+  --red: #ed8796;
+  --mauve: #c6a0f6;
+  --pink: #f5bde6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'JetBrainsMono Nerd Font', ui-monospace, monospace;
+  font-size: var(--text-size);
+  color: var(--text);
+  overflow: hidden;
+}
+
+#root {
+  overflow: hidden;
+  margin: 8px;
+  height: calc(100% - 16px);
+  border: 1px solid rgba(198, 160, 246, 0.25);
+  background: linear-gradient(
+    180deg,
+    rgba(30, 32, 48, 0.97) 0%,
+    rgba(36, 39, 58, 0.93) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  height: 100%;
+  padding: 0 10px;
+}
+
+.left,
+.center,
+.right {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.center {
+  justify-self: center;
+  color: var(--subtext0);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  font-variant-numeric: tabular-nums;
+}
+
+.right {
+  justify-self: end;
+}
+
+i {
+  font-size: var(--icon-size);
+}
+
+.logo {
+  margin-right: 12px;
+  color: var(--blue);
+}
+
+.workspaces {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.workspace {
+  padding: 4px 8px;
+  border: 0;
+  background: var(--surface0);
+  color: var(--subtext0);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.workspace.displayed {
+  background: var(--surface1);
+  color: var(--text);
+}
+
+.workspace.focused,
+.workspace:hover {
+  background: var(--mauve);
+  color: var(--crust);
+}
+
+.binding-mode,
+.paused-button,
+.keyboard {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 0;
+  background: var(--surface0);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.binding-mode:hover,
+.paused-button:hover {
+  background: var(--surface1);
+}
+
+.binding-mode {
+  margin-right: 6px;
+}
+
+.tiling-direction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 14px;
+  padding: 0;
+  border: 0;
+  background: var(--surface0);
+  color: var(--lavender);
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.tiling-direction:hover {
+  background: var(--surface1);
+}
+
+.paused-button {
+  margin-right: 14px;
+  background: var(--red);
+  color: var(--crust);
+}
+
+.keyboard {
+  margin-right: 16px;
+  border: 1px solid rgba(198, 160, 246, 0.28);
+  background: rgba(198, 160, 246, 0.14);
+  color: var(--lavender);
+  letter-spacing: 0.5px;
+  cursor: default;
+}
+
+.keyboard i {
+  color: var(--mauve);
+}
+
+.network,
+.memory,
+.cpu,
+.battery,
+.weather {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 16px;
+  color: var(--subtext1);
+  white-space: nowrap;
+}
+
+.weather {
+  margin-right: 0;
+  color: var(--subtext0);
+}
+
+.network i {
+  color: var(--teal);
+}
+
+.memory i {
+  color: var(--peach);
+}
+
+.cpu i {
+  color: var(--blue);
+}
+
+.battery i {
+  color: var(--green);
+}
+
+.weather i {
+  color: var(--yellow);
+}
+
+.network-ssid {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cpu .high-usage {
+  color: var(--red);
+  font-weight: 700;
+}
+
+.battery .charging-icon {
+  font-size: 8px;
+  color: var(--green);
+}
