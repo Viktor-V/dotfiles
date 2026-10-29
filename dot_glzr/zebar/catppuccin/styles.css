@@ -156,25 +156,6 @@ i {
   margin-right: 6px;
 }
 
-.tiling-direction {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  margin-right: 14px;
-  padding: 0;
-  border: 0;
-  background: var(--surface0);
-  color: var(--lavender);
-  cursor: pointer;
-  transition: background 120ms ease;
-}
-
-.tiling-direction:hover {
-  background: var(--surface1);
-}
-
 .paused-button {
   margin-right: 14px;
   background: var(--red);
@@ -195,6 +176,7 @@ i {
 }
 
 .network,
+.volume,
 .memory,
 .cpu,
 .battery,
@@ -230,6 +212,23 @@ i {
 
 .weather i {
   color: var(--yellow);
+}
+
+.volume {
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+.volume:hover {
+  color: var(--text);
+}
+
+.volume i {
+  color: var(--pink);
+}
+
+.volume.muted i {
+  color: var(--red);
 }
 
 .network-ssid {

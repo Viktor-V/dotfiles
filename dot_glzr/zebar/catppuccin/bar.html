@@ -27,6 +27,7 @@
         network: { type: 'network' },
         glazewm: { type: 'glazewm' },
         keyboard: { type: 'keyboard', refreshInterval: 500 },
+        audio: { type: 'audio' },
         cpu: { type: 'cpu' },
         date: { type: 'date', formatting: 'EEE d MMM HH:mm' },
         battery: { type: 'battery' },
@@ -84,6 +85,19 @@
           if (batteryOutput.chargePercent > 20)
             return <i className="nf nf-fa-battery_1"></i>;
           return <i className="nf nf-fa-battery_0"></i>;
+        }
+
+        function getVolumeIcon(device) {
+          if (!device || device.isMuted || device.volume === 0) {
+            return 'nf-fa-volume_off';
+          }
+          if (device.volume < 33) {
+            return 'nf-fa-volume_low';
+          }
+          if (device.volume < 66) {
+            return 'nf-fa-volume_down';
+          }
+          return 'nf-fa-volume_up';
         }
 
         function getWeatherIcon(weatherOutput) {
@@ -170,18 +184,6 @@
                       {bindingMode.displayName ?? bindingMode.name}
                     </button>
                   ))}
-
-                  <button
-                    className={`tiling-direction nf ${
-                      output.glazewm.tilingDirection === 'horizontal'
-                        ? 'nf-md-swap_horizontal'
-                        : 'nf-md-swap_vertical'
-                    }`}
-                    onClick={() =>
-                      output.glazewm.runCommand('toggle-tiling-direction')
-                    }
-                    title="Toggle tiling direction"
-                  ></button>
                 </>
               )}
 
@@ -189,6 +191,34 @@
                 <div className="keyboard" title={output.keyboard.layout}>
                   <i className="nf nf-md-keyboard"></i>
                   <span>{layoutLabel}</span>
+                </div>
+              )}
+
+              {output.audio?.defaultPlaybackDevice && (
+                <div
+                  className={`volume${output.audio.defaultPlaybackDevice.isMuted ? ' muted' : ''}`}
+                  title="Click to mute, scroll to change volume"
+                  onClick={() =>
+                    output.audio.setMute(
+                      !output.audio.defaultPlaybackDevice.isMuted,
+                    )
+                  }
+                  onWheel={event => {
+                    const volume = Math.max(
+                      0,
+                      Math.min(
+                        100,
+                        output.audio.defaultPlaybackDevice.volume +
+                          (event.deltaY < 0 ? 5 : -5),
+                      ),
+                    );
+                    output.audio.setVolume(volume);
+                  }}
+                >
+                  <i
+                    className={`nf ${getVolumeIcon(output.audio.defaultPlaybackDevice)}`}
+                  ></i>
+                  {Math.round(output.audio.defaultPlaybackDevice.volume)}%
                 </div>
               )}
 
