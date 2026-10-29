@@ -77,24 +77,11 @@ local scheme_colors = {
 }
 
 local colors = {
-  border = scheme_colors.catppuccin.macchiato.lavender,
   tab_bar_active_tab_fg = scheme_colors.catppuccin.macchiato.mauve,
   tab_bar_active_tab_bg = scheme_colors.catppuccin.macchiato.crust,
   tab_bar_text = scheme_colors.catppuccin.macchiato.crust,
   arrow_foreground_leader = scheme_colors.catppuccin.macchiato.lavender,
   arrow_background_leader = scheme_colors.catppuccin.macchiato.crust,
-}
-
--- Border
-config.window_frame = {
-  border_left_width = '0.4cell',
-  border_right_width = '0.4cell',
-  border_bottom_height = '0.15cell',
-  border_top_height = '0.15cell',
-  border_left_color = colors.border,
-  border_right_color = colors.border,
-  border_bottom_color = colors.border,
-  border_top_color = colors.border,
 }
 
 -- Leader + keybindings
