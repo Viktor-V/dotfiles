@@ -221,8 +221,9 @@ keybindings:
     bindings: ['alt+v']
 
   # Change focus from tiling windows -> floating -> fullscreen.
+  # Moved off alt+space so Flow Launcher keeps its global shortcut.
   - commands: ['wm-cycle-focus']
-    bindings: ['alt+space']
+    bindings: ['alt+g']
 
   # Change the focused window to be floating.
   - commands: ['toggle-floating --centered']
