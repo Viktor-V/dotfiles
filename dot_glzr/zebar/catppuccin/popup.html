@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+
+    <script
+      src="https://unpkg.com/@babel/standalone@7.25.6/babel.min.js"
+      integrity="sha256-aS0B0wnsaDByLfE16h4MDCP1fQFccysd1YWOcV+gbBo="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div id="root" class="popup-root"></div>
+
+    <script type="text/babel" data-type="module">
+      import React, {
+        useState,
+        useEffect,
+        useRef,
+      } from 'https://esm.sh/react@18?dev';
+      import { createRoot } from 'https://esm.sh/react-dom@18/client?dev';
+      import * as zebar from 'https://esm.sh/zebar@3.0';
+
+      const providers = zebar.createProviderGroup({
+        network: { type: 'network' },
+        weather: { type: 'weather' },
+        systray: { type: 'systray' },
+      });
+
+      function getWeatherIcon(status) {
+        switch (status) {
+          case 'clear_day':
+            return <i className="nf nf-weather-day_sunny"></i>;
+          case 'clear_night':
+            return <i className="nf nf-weather-night_clear"></i>;
+          case 'cloudy_day':
+            return <i className="nf nf-weather-day_cloudy"></i>;
+          case 'cloudy_night':
+            return <i className="nf nf-weather-night_alt_cloudy"></i>;
+          case 'light_rain_day':
+            return <i className="nf nf-weather-day_sprinkle"></i>;
+          case 'light_rain_night':
+            return <i className="nf nf-weather-night_alt_sprinkle"></i>;
+          case 'heavy_rain_day':
+            return <i className="nf nf-weather-day_rain"></i>;
+          case 'heavy_rain_night':
+            return <i className="nf nf-weather-night_alt_rain"></i>;
+          case 'snow_day':
+            return <i className="nf nf-weather-day_snow"></i>;
+          case 'snow_night':
+            return <i className="nf nf-weather-night_alt_snow"></i>;
+          case 'thunder_day':
+            return <i className="nf nf-weather-day_lightning"></i>;
+          case 'thunder_night':
+            return <i className="nf nf-weather-night_alt_lightning"></i>;
+          default:
+            return <i className="nf nf-weather-na"></i>;
+        }
+      }
+
+      function statusLabel(status) {
+        if (!status) return 'Unknown';
+        return status
+          .split('_')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      }
+
+      function formatSize(measure) {
+        if (!measure) return '—';
+        return `${measure.siValue.toFixed(1)} ${measure.siUnit}`;
+      }
+
+      function Calendar() {
+        const today = new Date();
+        const [view, setView] = useState(
+          () => new Date(today.getFullYear(), today.getMonth(), 1),
+        );
+        const monthNames = [
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        ];
+        const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+        const year = view.getFullYear();
+        const month = view.getMonth();
+        const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const cells = [];
+        for (let i = 0; i < firstDay; i += 1) cells.push(null);
+        for (let day = 1; day <= daysInMonth; day += 1) cells.push(day);
+        while (cells.length % 7 !== 0) cells.push(null);
+
+        return (
+          <div className="calendar">
+            <div className="calendar-header">
+              <button
+                className="calendar-nav"
+                onClick={() => setView(new Date(year, month - 1, 1))}
+                title="Previous month"
+              >
+                ‹
+              </button>
+              <span className="calendar-month">
+                {monthNames[month]} {year}
+              </span>
+              <button
+                className="calendar-nav"
+                onClick={() => setView(new Date(year, month + 1, 1))}
+                title="Next month"
+              >
+                ›
+              </button>
+            </div>
+            <div className="calendar-weekdays">
+              {weekdays.map(day => (
+                <span key={day}>{day}</span>
+              ))}
+            </div>
+            <div className="calendar-grid">
+              {cells.map((day, index) => {
+                const isToday =
+                  day === today.getDate() &&
+                  month === today.getMonth() &&
+                  year === today.getFullYear();
+                return (
+                  <span
+                    className={`cal-day${isToday ? ' today' : ''}${day ? '' : ' empty'}`}
+                    key={index}
+                  >
+                    {day ?? ''}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }
+
+      createRoot(document.getElementById('root')).render(<App />);
+
+      function App() {
+        const [output, setOutput] = useState(providers.outputMap);
+        const type = useRef(
+          localStorage.getItem('zebar-popup') || 'power',
+        ).current;
+
+        useEffect(() => {
+          providers.onOutput(() => setOutput(providers.outputMap));
+        }, []);
+
+        const close = () => {
+          localStorage.setItem('zebar-popup-open', '0');
+          try {
+            window.close();
+          } catch (error) {
+            console.error(error);
+          }
+          zebar
+            .shellExec('powershell.exe', [
+              '-NoProfile',
+              '-ExecutionPolicy',
+              'Bypass',
+              '-WindowStyle',
+              'Hidden',
+              '-File',
+              'C:/Users/ViktorV/.glzr/zebar/catppuccin/close-popup.ps1',
+            ])
+            .catch(error => {
+              console.error(error);
+            });
+        };
+
+        useEffect(() => {
+          const onKeyDown = event => {
+            if (event.key === 'Escape') close();
+          };
+          window.addEventListener('keydown', onKeyDown);
+          return () => {
+            window.removeEventListener('keydown', onKeyDown);
+          };
+        }, []);
+
+        const runShell = (program, args) => {
+          zebar.shellExec(program, args).catch(error => {
+            console.error(error);
+          });
+          close();
+        };
+
+        const powerActions = [
+          {
+            key: 'lock',
+            icon: 'nf-fa-lock',
+            label: 'Lock',
+            program: 'rundll32.exe',
+            args: ['user32.dll,LockWorkStation'],
+          },
+          {
+            key: 'signout',
+            icon: 'nf-fa-sign_out',
+            label: 'Sign out',
+            program: 'shutdown.exe',
+            args: ['/l'],
+          },
+          {
+            key: 'restart',
+            icon: 'nf-fa-refresh',
+            label: 'Restart',
+            program: 'shutdown.exe',
+            args: ['/r', '/t', '0'],
+          },
+          {
+            key: 'shutdown',
+            icon: 'nf-fa-power_off',
+            label: 'Shut down',
+            program: 'shutdown.exe',
+            args: ['/s', '/t', '0'],
+          },
+        ];
+
+        const network = output.network;
+        const interfaceInfo = network?.defaultInterface;
+        const gateway = network?.defaultGateway;
+        const weather = output.weather;
+        const systray = output.systray;
+        const hiddenTrayWords = [
+          'volume',
+          'speaker',
+          'battery',
+          'power',
+          'charge',
+          'charging',
+          'звук',
+          'динамик',
+          'батаре',
+          'аккум',
+          'заряд',
+          'skaļ',
+          'skal',
+          'akumul',
+          'baroš',
+          'enerģ',
+        ];
+        const trayIcons = (systray?.icons ?? []).filter(icon => {
+          const tooltip = (icon.tooltip || '').toLowerCase();
+          if (!tooltip) return false;
+          return !hiddenTrayWords.some(word => tooltip.includes(word));
+        });
+
+        return (
+          <div className={`popup ${type}-popup`}>
+            {type === 'power' && (
+              <>
+                <div className="popup-header">
+                  <div className="popup-title">
+                    <i className="nf nf-fa-power_off"></i>
+                    Power
+                  </div>
+                  <button className="popup-close" onClick={close} title="Close">
+                    ×
+                  </button>
+                </div>
+                <div className="popup-body">
+                  <div className="power-actions">
+                    {powerActions.map(action => (
+                      <button
+                        className={`power-action ${action.key}`}
+                        key={action.key}
+                        onClick={() => runShell(action.program, action.args)}
+                      >
+                        <i className={`nf ${action.icon}`}></i>
+                        {action.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {type === 'calendar' && (
+              <>
+                <div className="popup-header">
+                  <div className="popup-title">
+                    <i className="nf nf-fa-calendar"></i>
+                    Calendar
+                  </div>
+                  <button className="popup-close" onClick={close} title="Close">
+                    ×
+                  </button>
+                </div>
+                <div className="popup-body">
+                  <Calendar />
+                </div>
+              </>
+            )}
+
+            {type === 'wifi' && (
+              <>
+                <div className="popup-header">
+                  <div className="popup-title">
+                    <i className="nf nf-md-wifi"></i>
+                    Network
+                  </div>
+                  <button className="popup-close" onClick={close} title="Close">
+                    ×
+                  </button>
+                </div>
+                <div className="popup-body">
+                  <div className="info-row">
+                    <span>SSID</span>
+                  <span>{gateway?.ssid ?? '—'}</span>
+                </div>
+                <div className="info-row">
+                  <span>Signal</span>
+                  <span>
+                    {gateway?.signalStrength != null
+                      ? `${gateway.signalStrength}%`
+                      : '—'}
+                  </span>
+                </div>
+                <div className="info-row">
+                  <span>Interface</span>
+                  <span>
+                    {interfaceInfo?.friendlyName ??
+                      interfaceInfo?.name ??
+                      '—'}
+                  </span>
+                </div>
+                <div className="info-row">
+                  <span>IPv4</span>
+                  <span>
+                    {interfaceInfo?.ipv4Addresses?.join(', ') || '—'}
+                  </span>
+                </div>
+                <div className="info-row">
+                  <span>MAC</span>
+                  <span>{interfaceInfo?.macAddress ?? '—'}</span>
+                </div>
+                <div className="info-row">
+                  <span>DNS</span>
+                  <span>{interfaceInfo?.dnsServers?.join(', ') || '—'}</span>
+                </div>
+                <div className="info-row">
+                  <span>Traffic</span>
+                  <span>
+                    ↓ {formatSize(network?.traffic?.received)} ↑{' '}
+                    {formatSize(network?.traffic?.transmitted)}
+                  </span>
+                </div>
+                <button
+                  className="popup-action"
+                  onClick={() =>
+                    runShell('cmd.exe', [
+                      '/c',
+                      'start',
+                      'ms-settings:network',
+                    ])
+                  }
+                >
+                  Network settings
+                </button>
+                </div>
+              </>
+            )}
+
+            {type === 'weather' && (
+              <>
+                <div className="popup-header">
+                  <div className="popup-title">
+                    <i className="nf nf-weather-day_sunny"></i>
+                    Weather
+                  </div>
+                  <button className="popup-close" onClick={close} title="Close">
+                    ×
+                  </button>
+                </div>
+                <div className="popup-body">
+                  {weather ? (
+                    <>
+                      <div className="weather-temp">
+                        {getWeatherIcon(weather.status)}
+                        {Math.round(weather.celsiusTemp)}°C
+                      </div>
+                      <div className="info-row">
+                        <span>Status</span>
+                        <span>{statusLabel(weather.status)}</span>
+                      </div>
+                      <div className="info-row">
+                        <span>Wind</span>
+                        <span>{Math.round(weather.windSpeed)} km/h</span>
+                      </div>
+                      <div className="info-row">
+                        <span>Time</span>
+                        <span>{weather.isDaytime ? 'Day' : 'Night'}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="popup-empty">Loading weather...</div>
+                  )}
+                </div>
+              </>
+            )}
+
+            {type === 'systray' && (
+              <>
+                <div className="popup-header">
+                  <div className="popup-title">
+                    <i className="nf nf-md-tray_full"></i>
+                    System tray
+                  </div>
+                  <button className="popup-close" onClick={close} title="Close">
+                    ×
+                  </button>
+                </div>
+                <div className="popup-body">
+                {trayIcons.length ? (
+                  <div className="tray-grid">
+                    {trayIcons.map(icon => (
+                      <button
+                        className="tray-icon"
+                        key={icon.id}
+                        title={icon.tooltip}
+                        onClick={() => systray.onLeftClick(icon.id)}
+                        onContextMenu={event => {
+                          event.preventDefault();
+                          systray.onRightClick(icon.id);
+                        }}
+                        onMouseEnter={() => systray.onHoverEnter(icon.id)}
+                        onMouseLeave={() => systray.onHoverLeave(icon.id)}
+                      >
+                        <img src={icon.iconUrl} alt={icon.tooltip} />
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="popup-empty">No tray icons</div>
+                )}
+                </div>
+              </>
+            )}
+          </div>
+        );
+      }
+    </script>
+  </body>
+</html>

@@ -132,10 +132,45 @@
         const layoutLabel =
           output.keyboard?.layout?.split('-')[0]?.toUpperCase();
 
+        const closePopups = () =>
+          zebar
+            .shellExec('powershell.exe', [
+              '-NoProfile',
+              '-ExecutionPolicy',
+              'Bypass',
+              '-WindowStyle',
+              'Hidden',
+              '-File',
+              'C:/Users/ViktorV/.glzr/zebar/catppuccin/close-popup.ps1',
+            ])
+            .catch(error => {
+              console.error(error);
+            });
+
+        const openPopup = async type => {
+          const current = localStorage.getItem('zebar-popup');
+          const isOpen = localStorage.getItem('zebar-popup-open') === '1';
+          if (isOpen && current === type) {
+            await closePopups();
+            localStorage.setItem('zebar-popup-open', '0');
+            return;
+          }
+          await closePopups();
+          localStorage.setItem('zebar-popup', type);
+          localStorage.setItem('zebar-popup-open', '1');
+          zebar.startWidgetPreset('popup', type).catch(error => {
+            console.error(error);
+          });
+        };
+
         return (
           <div className="app">
             <div className="left">
-              <i className="logo nf nf-fa-windows"></i>
+              <button
+                className="logo nf nf-fa-windows"
+                onClick={() => openPopup('power')}
+                title="Power menu"
+              ></button>
               {output.glazewm && (
                 <div className="workspaces">
                   {output.glazewm.currentWorkspaces.map(workspace => (
@@ -156,7 +191,13 @@
               )}
             </div>
 
-            <div className="center">{output.date?.formatted}</div>
+            <button
+              className="center clock-button"
+              onClick={() => openPopup('calendar')}
+              title="Calendar"
+            >
+              {output.date?.formatted}
+            </button>
 
             <div className="right">
               {output.glazewm && (
@@ -223,7 +264,11 @@
               )}
 
               {output.network && (
-                <div className="network">
+                <div
+                  className="network"
+                  onClick={() => openPopup('wifi')}
+                  title="WiFi details"
+                >
                   {getNetworkIcon(output.network)}
                   <span className="network-ssid">
                     {output.network.defaultGateway?.ssid}
@@ -260,11 +305,21 @@
               )}
 
               {output.weather && (
-                <div className="weather">
+                <div
+                  className="weather"
+                  onClick={() => openPopup('weather')}
+                  title="Weather"
+                >
                   {getWeatherIcon(output.weather)}
                   {Math.round(output.weather.celsiusTemp)}°C
                 </div>
               )}
+
+              <button
+                className="tray-button nf nf-md-tray_full"
+                onClick={() => openPopup('systray')}
+                title="System tray"
+              ></button>
             </div>
           </div>
         );
