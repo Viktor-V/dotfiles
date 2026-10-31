@@ -210,7 +210,7 @@ wezterm.on('gui-startup', function(cmd)
   local nvim_tab = work:spawn_tab({ args = { 'nvim' } })
   nvim_tab:set_title('neovim')
 
-  local shell_tab = work:spawn_tab({ args = { 'fish', '-c', 'fastfetch; exec fish' } })
+  local shell_tab = work:spawn_tab({ args = { 'fish' } })
   shell_tab:set_title('shell')
 
   wezterm.mux.set_active_workspace('work')
