@@ -162,15 +162,10 @@
           providers.onOutput(() => setOutput(providers.outputMap));
         }, []);
 
-        const close = () => {
+        const close = async () => {
           localStorage.setItem('zebar-popup-open', '0');
           try {
-            window.close();
-          } catch (error) {
-            console.error(error);
-          }
-          zebar
-            .shellExec('powershell.exe', [
+            await zebar.shellExec('powershell.exe', [
               '-NoProfile',
               '-ExecutionPolicy',
               'Bypass',
@@ -178,10 +173,10 @@
               'Hidden',
               '-File',
               'C:/Users/ViktorV/.glzr/zebar/catppuccin/close-popup.ps1',
-            ])
-            .catch(error => {
-              console.error(error);
-            });
+            ]);
+          } catch (error) {
+            console.error(error);
+          }
         };
 
         useEffect(() => {
