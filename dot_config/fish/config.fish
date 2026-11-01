@@ -87,3 +87,7 @@ set -g fish_pager_color_prefix '#c6a0f6'
 
 # Enable vi mode
 fish_vi_key_bindings
+
+if type -q fzf
+    fzf --fish | source
+end
