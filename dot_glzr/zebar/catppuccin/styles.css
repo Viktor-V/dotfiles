@@ -334,6 +334,18 @@ i {
   justify-content: flex-start;
 }
 
+.systray-popup {
+  height: auto;
+  max-height: 100%;
+}
+
+.systray-popup .popup-body {
+  flex: 0 1 auto;
+  justify-content: flex-start;
+  overflow-y: hidden;
+  padding-top: 4px;
+}
+
 .popup-header {
   display: flex;
   align-items: center;

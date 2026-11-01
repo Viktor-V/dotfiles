@@ -23,6 +23,7 @@
       } from 'https://esm.sh/react@18?dev';
       import { createRoot } from 'https://esm.sh/react-dom@18/client?dev';
       import * as zebar from 'https://esm.sh/zebar@3.0';
+      import { LogicalSize } from 'https://esm.sh/@tauri-apps/api@2.0.2/dpi';
 
       const providers = zebar.createProviderGroup({
         network: { type: 'network' },
@@ -259,6 +260,16 @@
           if (!tooltip) return false;
           return !hiddenTrayWords.some(word => tooltip.includes(word));
         });
+
+        useEffect(() => {
+          if (type !== 'systray') return;
+          const rows = Math.max(1, Math.ceil(trayIcons.length / 6));
+          const height = 28 + 16 + 10 + 4 + rows * 32 + (rows - 1) * 6 + 4;
+          zebar
+            .currentWidget()
+            .window.tauri.setSize(new LogicalSize(380, height))
+            .catch(() => {});
+        }, [type, trayIcons.length]);
 
         return (
           <div className={`popup ${type}-popup`}>

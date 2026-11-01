@@ -110,7 +110,7 @@
           "offsetX": "-8px",
           "offsetY": "56px",
           "width": "380px",
-          "height": "94px",
+          "height": "130px",
           "monitorSelection": { "type": "primary" },
           "dockToEdge": { "enabled": false, "edge": null, "windowMargin": "0px" }
         }
