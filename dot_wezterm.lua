@@ -203,12 +203,9 @@ end)
 wezterm.on('gui-startup', function(cmd)
   local tab, pane, work = wezterm.mux.spawn_window({
     workspace = 'work',
-    args = { 'opencode' },
+    args = { 'bash', '-lc', 'exec bash "$HOME/.config/wezterm/opencode-web.sh"' },
   })
   tab:set_title('opencode')
-
-  local nvim_tab = work:spawn_tab({ args = { 'nvim' } })
-  nvim_tab:set_title('neovim')
 
   local shell_tab = work:spawn_tab({ args = { 'fish' } })
   shell_tab:set_title('shell')
