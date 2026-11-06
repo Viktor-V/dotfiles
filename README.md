@@ -7,7 +7,7 @@ The idea is simple: sit down at a fresh machine (Linux, macOS, or Windows) and g
 ## Features
 
 - **WezTerm** with the Windows (Campbell) theme and a leader key workflow (tabs, splits, panes)
-- **WezTerm startup** opens maximized on the Windows virtual desktop **«Консоль»** via a small PowerShell helper (requires `VirtualDesktop.exe`, installed by `windows-setup`)
+- **WezTerm startup** opens maximized on the Windows virtual desktop **«Консоль»** and switches to it via a small PowerShell helper (requires `VirtualDesktop.exe`, installed by `windows-setup`)
 - **fish** with Windows (Campbell) colors, vi key bindings, and zoxide / atuin integration
 - **Starship** single-line prompt with compact git info on the right (branch, stash, status counts, ahead/behind)
 - **Flow Launcher** configured with the Windows theme

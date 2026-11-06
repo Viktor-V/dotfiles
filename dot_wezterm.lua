@@ -192,6 +192,7 @@ wezterm.on('gui-startup', function(cmd)
     '-WindowStyle', 'Hidden',
     '-File', helper,
     '-ProcessId', tostring(wezterm.procinfo.pid()),
+    '-Switch',
   }
 end)
 

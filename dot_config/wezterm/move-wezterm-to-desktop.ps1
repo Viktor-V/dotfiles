@@ -2,6 +2,7 @@ param(
     [Parameter(Mandatory = $true)]
     [int]$ProcessId,
     [string]$DesktopName = '',
+    [switch]$Switch,
     [string]$VirtualDesktopExe = "$env:LOCALAPPDATA\Programs\VirtualDesktop\VirtualDesktop.exe"
 )
 
@@ -90,6 +91,12 @@ try {
     & $VirtualDesktopExe /Quiet /GetDesktop:$DesktopName /MoveWindowHandle:$hwnd 2>$null
     $moveExit = $LASTEXITCODE
     Write-Log "Moved hwnd $hwnd (pid $ProcessId) to desktop '$DesktopName' (exit $moveExit)"
+
+    if ($Switch) {
+        & $VirtualDesktopExe /Quiet /Switch:$DesktopName 2>$null
+        Write-Log "Switched to desktop '$DesktopName' (exit $LASTEXITCODE)"
+    }
+
     exit $moveExit
 }
 catch {
