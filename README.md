@@ -6,12 +6,11 @@ The idea is simple: sit down at a fresh machine (Linux, macOS, or Windows) and g
 
 ## Features
 
-- **WezTerm** with the Catppuccin Macchiato theme and a leader key workflow (tabs, splits, panes)
-- **fish** with Catppuccin Macchiato colors, vi key bindings, and zoxide / atuin integration
+- **WezTerm** with the Windows (Campbell) theme and a leader key workflow (tabs, splits, panes)
+- **fish** with Windows (Campbell) colors, vi key bindings, and zoxide / atuin integration
 - **Starship** single-line prompt with compact git info on the right (branch, stash, status counts, ahead/behind)
-- **GlazeWM** tiling window manager with Catppuccin Macchiato borders and i3-style `alt` keybindings
-- **Zebar** Catppuccin Macchiato top bar with GlazeWM workspaces, system stats and a keyboard layout indicator
-- **Windows shell** with hidden desktop icons and an auto-hide taskbar
+- **Flow Launcher** configured with the Windows theme
+- **Windows shell** with hidden desktop icons
 - **WSL2** via `/etc/wsl.conf` with the `metadata` mount for seamless Windows and WSL file permissions
 
 ## Install
