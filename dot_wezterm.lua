@@ -9,7 +9,6 @@ end
 config.max_fps = 240
 config.animation_fps = 240
 
-local tab_style = 'square'
 local leader_prefix = utf8.char(0x1f30a)
 
 -- Keep (user)
@@ -49,14 +48,12 @@ config.font = wezterm.font('JetBrainsMono NF')
 config.font_size = 14.0
 config.window_close_confirmation = 'NeverPrompt'
 config.window_decorations = 'RESIZE'
+config.default_workspace = 'консоль'
 
 -- Colors (Windows Terminal "Campbell" palette)
-config.color_scheme = 'Campbell'
+config.color_scheme = 'Campbell (Gogh)'
 
 local colors = {
-  tab_bar_active_tab_fg = '#0078D4',
-  tab_bar_active_tab_bg = '#0C0C0C',
-  tab_bar_text = '#F2F2F2',
   arrow_foreground_leader = '#0078D4',
   arrow_background_leader = '#0C0C0C',
 }
@@ -101,7 +98,30 @@ config.hide_tab_bar_if_only_one_tab = false
 config.tab_bar_at_bottom = true
 config.use_fancy_tab_bar = false
 config.tab_and_split_indices_are_zero_based = true
+config.tab_max_width = 32
 
+local tab_colors = {
+  bar = '#0C0C0C',
+  active_bg = '#0078D4',
+  active_fg = '#FFFFFF',
+  inactive_bg = '#1E1E1E',
+  inactive_fg = '#CCCCCC',
+  hover_bg = '#2D2D2D',
+  hover_fg = '#FFFFFF',
+}
+
+config.colors = {
+  tab_bar = {
+    background = tab_colors.bar,
+    active_tab = { bg_color = tab_colors.active_bg, fg_color = tab_colors.active_fg },
+    inactive_tab = { bg_color = tab_colors.inactive_bg, fg_color = tab_colors.inactive_fg },
+    inactive_tab_hover = { bg_color = tab_colors.hover_bg, fg_color = tab_colors.hover_fg },
+    new_tab = { bg_color = tab_colors.inactive_bg, fg_color = tab_colors.inactive_fg },
+    new_tab_hover = { bg_color = tab_colors.hover_bg, fg_color = tab_colors.hover_fg },
+  },
+}
+
+-- Flat (non-rounded) tabs; padding is applied inside format-tab-title.
 local function tab_title(tab_info)
   local title = tab_info.tab_title
   if title and #title > 0 then
@@ -111,58 +131,42 @@ local function tab_title(tab_info)
 end
 
 wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
-  local num = (tab.tab_index + 1) % 10
-  local title = ' ' .. num .. ': ' .. tab_title(tab) .. ' '
-  local left_edge_text = ''
-  local right_edge_text = ''
+  local label = string.format('%d: %s', (tab.tab_index + 1) % 10, tab_title(tab))
+  label = wezterm.truncate_right(label, math.max(1, max_width - 2))
 
-  if tab_style == 'rounded' then
-    title = num .. ': ' .. tab_title(tab)
-    title = wezterm.truncate_right(title, max_width - 2)
-    left_edge_text = wezterm.nerdfonts.ple_left_half_circle_thick
-    right_edge_text = wezterm.nerdfonts.ple_right_half_circle_thick
-  end
-
+  local bg = tab_colors.inactive_bg
+  local fg = tab_colors.inactive_fg
   if tab.is_active then
-    return {
-      { Background = { Color = colors.tab_bar_active_tab_bg } },
-      { Foreground = { Color = colors.tab_bar_active_tab_fg } },
-      { Text = left_edge_text },
-      { Background = { Color = colors.tab_bar_active_tab_fg } },
-      { Foreground = { Color = colors.tab_bar_text } },
-      { Text = title },
-      { Background = { Color = colors.tab_bar_active_tab_bg } },
-      { Foreground = { Color = colors.tab_bar_active_tab_fg } },
-      { Text = right_edge_text },
-    }
+    bg = tab_colors.active_bg
+    fg = tab_colors.active_fg
+  elseif hover then
+    bg = tab_colors.hover_bg
+    fg = tab_colors.hover_fg
   end
+
+  return {
+    { Background = { Color = bg } },
+    { Foreground = { Color = fg } },
+    { Text = ' ' .. label .. ' ' },
+  }
 end)
 
 -- Leader active indicator
 wezterm.on('update-status', function(window, _)
-  local solid_left_arrow = ''
+  local prefix = ''
+  local arrow = ''
   local arrow_foreground = { Foreground = { Color = colors.arrow_foreground_leader } }
   local arrow_background = { Background = { Color = colors.arrow_background_leader } }
-  local prefix = ''
 
   if window:leader_is_active() then
     prefix = ' ' .. leader_prefix
+    arrow = wezterm.nerdfonts.pl_left_hard_divider
 
-    if tab_style == 'rounded' then
-      solid_left_arrow = wezterm.nerdfonts.ple_right_half_circle_thick
-    else
-      solid_left_arrow = wezterm.nerdfonts.pl_left_hard_divider
-    end
-
-    local tabs = window:mux_window():tabs_with_info()
-
-    if tab_style ~= 'rounded' then
-      for _, tab_info in ipairs(tabs) do
-        if tab_info.is_active and tab_info.tab_index == 0 then
-          arrow_background = { Foreground = { Color = colors.tab_bar_active_tab_fg } }
-          solid_left_arrow = wezterm.nerdfonts.pl_right_hard_divider
-          break
-        end
+    for _, tab_info in ipairs(window:mux_window():tabs_with_info()) do
+      if tab_info.is_active and tab_info.tab_index == 0 then
+        arrow_background = { Foreground = { Color = colors.arrow_foreground_leader } }
+        arrow = wezterm.nerdfonts.pl_right_hard_divider
+        break
       end
     end
   end
@@ -172,8 +176,14 @@ wezterm.on('update-status', function(window, _)
     { Text = prefix },
     arrow_foreground,
     arrow_background,
-    { Text = solid_left_arrow },
+    { Text = arrow },
   })
+end)
+
+-- Open the initial window maximized in the "консоль" workspace.
+wezterm.on('gui-startup', function(cmd)
+  local _, _, window = wezterm.mux.spawn_window(cmd or {})
+  window:gui_window():maximize()
 end)
 
 return config
