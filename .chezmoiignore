@@ -4,6 +4,8 @@ LICENSE
 {{ if ne .chezmoi.os "windows" }}
 AppData/
 configure-windows.ps1
+.config/wezterm/
+install-virtualdesktop.ps1
 {{ else }}
 install-wsl.conf.sh
 {{ end }}
