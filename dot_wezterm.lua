@@ -48,7 +48,6 @@ config.font = wezterm.font('JetBrainsMono NF')
 config.font_size = 14.0
 config.window_close_confirmation = 'NeverPrompt'
 config.window_decorations = 'RESIZE'
-config.default_workspace = 'консоль'
 
 -- Colors (Windows Terminal "Campbell" palette)
 config.color_scheme = 'Campbell (Gogh)'
@@ -180,10 +179,20 @@ wezterm.on('update-status', function(window, _)
   })
 end)
 
--- Open the initial window maximized in the "консоль" workspace.
+-- Open maximized, then move the window to the Windows virtual desktop.
 wezterm.on('gui-startup', function(cmd)
   local _, _, window = wezterm.mux.spawn_window(cmd or {})
   window:gui_window():maximize()
+
+  local helper = wezterm.home_dir .. '\\.config\\wezterm\\move-wezterm-to-desktop.ps1'
+  wezterm.background_child_process {
+    'powershell.exe',
+    '-NoProfile',
+    '-ExecutionPolicy', 'Bypass',
+    '-WindowStyle', 'Hidden',
+    '-File', helper,
+    '-ProcessId', tostring(wezterm.procinfo.pid()),
+  }
 end)
 
 return config
