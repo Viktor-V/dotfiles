@@ -164,7 +164,7 @@
   "StartFlowLauncherOnSystemStartup": true,
   "UseLogonTaskForStartup": false,
   "HideOnStartup": true,
-  "HideNotifyIcon": false,
+  "HideNotifyIcon": true,
   "LeaveCmdOpen": false,
   "HideWhenDeactivated": true,
   "ShowTaskbarWhenInvoked": false,
