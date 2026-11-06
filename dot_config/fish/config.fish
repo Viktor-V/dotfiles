@@ -33,7 +33,6 @@ alias gl='git log --oneline --graph --decorate --all'
 # New tools aliases
 alias tb='btop'
 alias lg='lazygit'
-alias ff='fastfetch'
 if type -q bat
     alias cat='bat'
 else if type -q batcat
@@ -63,27 +62,27 @@ fish_add_path /opt/homebrew/bin
 fish_add_path /usr/local/bin
 fish_add_path /usr/local/go/bin
 
-# Catppuccin Macchiato colors
-set -g fish_color_normal '#cad3f5'
-set -g fish_color_command '#8aadf4'
-set -g fish_color_param '#f0c6c6'
-set -g fish_color_quote '#a6da95'
-set -g fish_color_redirection '#8bd5ca'
-set -g fish_color_end '#c6a0f6'
-set -g fish_color_error '#ed8796'
-set -g fish_color_comment '#5b6078'
-set -g fish_color_operator '#91d7e3'
-set -g fish_color_escape '#f0c6c6'
-set -g fish_color_autosuggestion '#494d64'
-set -g fish_color_cwd '#8aadf4'
-set -g fish_color_cwd_root '#ed8796'
-set -g fish_color_user '#a6da95'
-set -g fish_color_host '#8aadf4'
-set -g fish_color_host_remote '#a6da95'
+# Windows Terminal "Campbell" colors
+set -g fish_color_normal '#CCCCCC'
+set -g fish_color_command '#3B78FF'
+set -g fish_color_param '#F2F2F2'
+set -g fish_color_quote '#16C60C'
+set -g fish_color_redirection '#61D6D6'
+set -g fish_color_end '#B4009E'
+set -g fish_color_error '#E74856'
+set -g fish_color_comment '#767676'
+set -g fish_color_operator '#3A96DD'
+set -g fish_color_escape '#F9F1A5'
+set -g fish_color_autosuggestion '#767676'
+set -g fish_color_cwd '#3B78FF'
+set -g fish_color_cwd_root '#E74856'
+set -g fish_color_user '#16C60C'
+set -g fish_color_host '#3B78FF'
+set -g fish_color_host_remote '#16C60C'
 set -g fish_color_cancel --reverse
-set -g fish_pager_color_completion '#cad3f5'
-set -g fish_pager_color_description '#b8c0e0'
-set -g fish_pager_color_prefix '#c6a0f6'
+set -g fish_pager_color_completion '#CCCCCC'
+set -g fish_pager_color_description '#767676'
+set -g fish_pager_color_prefix '#3B78FF'
 
 # Enable vi mode
 fish_vi_key_bindings
