@@ -50,38 +50,15 @@ config.font_size = 14.0
 config.window_close_confirmation = 'NeverPrompt'
 config.window_decorations = 'RESIZE'
 
--- Colors
-config.color_scheme = 'Catppuccin Macchiato'
-
-local scheme_colors = {
-  catppuccin = {
-    macchiato = {
-      rosewater = 'f4dbd6',
-      flamingo = 'f0c6c6',
-      pink = 'f5bde6',
-      mauve = 'c6a0f6',
-      red = 'ed8796',
-      maroon = 'ee99a0',
-      peach = '#f5a97f',
-      yellow = '#eed49f',
-      green = '#a6da95',
-      teal = '#8bd5ca',
-      sky = '#91d7e3',
-      sapphire = '#7dc4e4',
-      blue = '#8aadf4',
-      lavender = '#b7bdf8',
-      text = '#cad3f5',
-      crust = '#181926',
-    },
-  },
-}
+-- Colors (Windows Terminal "Campbell" palette)
+config.color_scheme = 'Campbell'
 
 local colors = {
-  tab_bar_active_tab_fg = scheme_colors.catppuccin.macchiato.mauve,
-  tab_bar_active_tab_bg = scheme_colors.catppuccin.macchiato.crust,
-  tab_bar_text = scheme_colors.catppuccin.macchiato.crust,
-  arrow_foreground_leader = scheme_colors.catppuccin.macchiato.lavender,
-  arrow_background_leader = scheme_colors.catppuccin.macchiato.crust,
+  tab_bar_active_tab_fg = '#0078D4',
+  tab_bar_active_tab_bg = '#0C0C0C',
+  tab_bar_text = '#F2F2F2',
+  arrow_foreground_leader = '#0078D4',
+  arrow_background_leader = '#0C0C0C',
 }
 
 -- Leader + keybindings
@@ -197,20 +174,6 @@ wezterm.on('update-status', function(window, _)
     arrow_background,
     { Text = solid_left_arrow },
   })
-end)
-
--- gui-startup (keep)
-wezterm.on('gui-startup', function(cmd)
-  local tab, pane, work = wezterm.mux.spawn_window({
-    workspace = 'work',
-    args = { 'bash', '-lc', 'exec bash "$HOME/.config/wezterm/opencode-web.sh"' },
-  })
-  tab:set_title('opencode')
-
-  local shell_tab = work:spawn_tab({ args = { 'fish' } })
-  shell_tab:set_title('shell')
-
-  wezterm.mux.set_active_workspace('work')
 end)
 
 return config
