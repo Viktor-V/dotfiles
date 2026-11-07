@@ -69,6 +69,69 @@ if set -q SSH_CONNECTION
     set -gx PATH (string match -v '/mnt/*' $PATH)
 end
 
+# Herdr helpers: create a tab in a named workspace, optionally starting OpenCode.
+function htab --description 'Create a Herdr tab in a named workspace'
+    if test (count $argv) -lt 1
+        echo "usage: htab <workspace> [cwd]" >&2
+        return 1
+    end
+
+    set -l workspace $argv[1]
+    set -l cwd $argv[2]
+    if test -z "$cwd"
+        set cwd "$HOME/projects/"(string lower -- $workspace)
+    end
+
+    set -l wsid (herdr workspace list 2>/dev/null | python3 -c '
+import json, sys
+label = sys.argv[1].lower()
+for ws in json.load(sys.stdin).get("result", {}).get("workspaces", []):
+    if (ws.get("label") or "").lower() == label:
+        print(ws["workspace_id"])
+        break
+' "$workspace")
+
+    if test -z "$wsid"
+        echo "Workspace '$workspace' not found; creating it..." >&2
+        herdr workspace create --label "$workspace" --cwd "$cwd" --focus >/dev/null
+        set wsid (herdr workspace list 2>/dev/null | python3 -c '
+import json, sys
+label = sys.argv[1].lower()
+for ws in json.load(sys.stdin).get("result", {}).get("workspaces", []):
+    if (ws.get("label") or "").lower() == label:
+        print(ws["workspace_id"])
+        break
+' "$workspace")
+    end
+
+    if test -z "$wsid"
+        echo "Could not find or create workspace '$workspace'" >&2
+        return 1
+    end
+
+    set -l out (herdr tab create --workspace "$wsid" --cwd "$cwd" --label "$workspace" --focus)
+    set -l pane (printf '%s' "$out" | python3 -c '
+import json, sys
+data = json.load(sys.stdin)
+print(data.get("result", {}).get("root_pane", {}).get("pane_id", ""))
+')
+    if test -z "$pane"
+        echo "Could not create a Herdr tab" >&2
+        return 1
+    end
+
+    echo "$pane"
+end
+
+function hchat --description 'Create a Herdr tab and start OpenCode'
+    set -l pane (htab $argv)
+    if test -z "$pane"
+        return 1
+    end
+    herdr pane run "$pane" opencode
+    echo "Started OpenCode in '$argv[1]' ($pane)"
+end
+
 # Windows Terminal "Campbell" colors
 set -g fish_color_normal '#CCCCCC'
 set -g fish_color_command '#3B78FF'
