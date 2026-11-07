@@ -71,8 +71,11 @@ end
 
 # Herdr helpers: create a tab in a named workspace, optionally starting OpenCode.
 function htab --description 'Create a Herdr tab in a named workspace'
+    argparse 't/tab=' -- $argv
+    or return 1
+
     if test (count $argv) -lt 1
-        echo "usage: htab <workspace> [cwd]" >&2
+        echo "usage: htab <workspace> [cwd] [--tab NAME]" >&2
         return 1
     end
 
@@ -109,7 +112,12 @@ for ws in json.load(sys.stdin).get("result", {}).get("workspaces", []):
         return 1
     end
 
-    set -l out (herdr tab create --workspace "$wsid" --cwd "$cwd" --focus)
+    set -l tabargs
+    if set -q _flag_tab
+        set tabargs --label "$_flag_tab"
+    end
+
+    set -l out (herdr tab create --workspace "$wsid" --cwd "$cwd" $tabargs --focus)
     set -l pane (printf '%s' "$out" | python3 -c '
 import json, sys
 data = json.load(sys.stdin)
@@ -129,7 +137,7 @@ function hchat --description 'Create a Herdr tab and start OpenCode'
         return 1
     end
     herdr pane run "$pane" opencode
-    echo "Started OpenCode in '$argv[1]' ($pane)"
+    echo "Started OpenCode in $pane"
 end
 
 # Windows Terminal "Campbell" colors
