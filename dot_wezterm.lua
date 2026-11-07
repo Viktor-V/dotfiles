@@ -181,7 +181,13 @@ end)
 
 -- Open maximized, then move the window to the Windows virtual desktop.
 wezterm.on('gui-startup', function(cmd)
-  local _, _, window = wezterm.mux.spawn_window(cmd or {})
+  local spawn = cmd or {}
+  if wezterm.target_triple:find('windows') then
+    -- Attach to the persistent Herdr session; fall back to fish if missing.
+    spawn.args = { '/usr/bin/fish', '-lc', 'command -v herdr >/dev/null 2>&1; and exec herdr; or exec fish' }
+  end
+
+  local _, _, window = wezterm.mux.spawn_window(spawn)
   window:gui_window():maximize()
 
   local helper = wezterm.home_dir .. '\\.config\\wezterm\\move-wezterm-to-desktop.ps1'

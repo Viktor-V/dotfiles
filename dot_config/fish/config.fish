@@ -58,6 +58,7 @@ set -gx VISUAL nvim
 
 # PATH additions (missing dirs are ignored, so this is safe on all OSes)
 fish_add_path $HOME/.local/bin
+fish_add_path $HOME/.opencode/bin
 fish_add_path /opt/homebrew/bin
 fish_add_path /usr/local/bin
 fish_add_path /usr/local/go/bin
