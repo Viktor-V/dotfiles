@@ -63,6 +63,12 @@ fish_add_path /opt/homebrew/bin
 fish_add_path /usr/local/bin
 fish_add_path /usr/local/go/bin
 
+# Over SSH, hide Windows interop paths so platform probes (for example
+# Moshi's cmd.exe check) see a Unix host instead of Windows.
+if set -q SSH_CONNECTION
+    set -gx PATH (string match -v '/mnt/*' $PATH)
+end
+
 # Windows Terminal "Campbell" colors
 set -g fish_color_normal '#CCCCCC'
 set -g fish_color_command '#3B78FF'
