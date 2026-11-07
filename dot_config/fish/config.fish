@@ -109,7 +109,7 @@ for ws in json.load(sys.stdin).get("result", {}).get("workspaces", []):
         return 1
     end
 
-    set -l out (herdr tab create --workspace "$wsid" --cwd "$cwd" --label "$workspace" --focus)
+    set -l out (herdr tab create --workspace "$wsid" --cwd "$cwd" --focus)
     set -l pane (printf '%s' "$out" | python3 -c '
 import json, sys
 data = json.load(sys.stdin)
