@@ -183,8 +183,7 @@ end)
 wezterm.on('gui-startup', function(cmd)
   local spawn = cmd or {}
   if wezterm.target_triple:find('windows') then
-    -- Attach to the persistent Herdr session; fall back to fish if missing.
-    spawn.args = { '/usr/bin/fish', '-lc', 'command -v herdr >/dev/null 2>&1; and exec herdr; or exec fish' }
+    spawn.args = { '/usr/bin/fish', '-l' }
   end
 
   local _, _, window = wezterm.mux.spawn_window(spawn)
