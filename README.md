@@ -9,6 +9,7 @@ The idea is simple: sit down at a fresh machine (Linux, macOS, or Windows) and g
 - **WezTerm** with the Windows (Campbell) theme and a leader key workflow (tabs, splits, panes)
 - **WezTerm startup** opens maximized on the Windows virtual desktop **«Разработка»**, switches to it, and launches **fish**
 - **fish** with Windows (Campbell) colors, vi key bindings, zoxide / atuin integration, and `~/.local/bin` + `~/.opencode/bin` in `PATH`
+- **OpenCode** helpers: `ocstatus`, `ocpair` (remote pairing through OpenTunnel), and `ocpair-local` (same Wi-Fi)
 - **Starship** single-line prompt with compact git info on the right (branch, stash, status counts, ahead/behind)
 - **Flow Launcher** configured with the Windows theme
 - **Windows shell** with hidden desktop icons

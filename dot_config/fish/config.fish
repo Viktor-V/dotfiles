@@ -48,9 +48,23 @@ alias ....='cd ../../..'
 
 # WSL specific (only define when Windows drives are mounted)
 if test -d /mnt/c
-    alias winhome='cd /mnt/c/Users/viktorv'
+    function winhome
+        set -l winuser (cmd.exe /c 'echo %USERNAME%' 2>/dev/null | string trim)
+        if test -n "$winuser"
+            cd /mnt/c/Users/$winuser
+        else
+            cd /mnt/c/Users
+        end
+    end
 end
 alias desk='cd ~/Desktop 2>/dev/null || mkdir -p ~/Desktop && cd ~/Desktop'
+
+# OpenCode server helpers (the server runs inside WSL)
+if type -q opencode
+    alias ocstatus='opencode service status'
+    alias ocpair='opencode pair --remote'
+    alias ocpair-local='opencode pair'
+end
 
 # Set default editor
 set -gx EDITOR nvim

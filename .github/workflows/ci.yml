@@ -13,7 +13,7 @@ jobs:
       - name: Install tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y lua5.4 shellcheck
+          sudo apt-get install -y fish lua5.4 shellcheck
           sudo curl -fsSL -o /usr/local/bin/chezmoi https://github.com/twpayne/chezmoi/releases/latest/download/chezmoi-linux-amd64
           sudo chmod +x /usr/local/bin/chezmoi
           chezmoi --version
@@ -33,3 +33,6 @@ jobs:
             sh -n /tmp/rendered.sh
             shellcheck /tmp/rendered.sh
           done
+
+      - name: Check fish config
+        run: fish -n dot_config/fish/config.fish

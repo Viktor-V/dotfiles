@@ -74,17 +74,16 @@ try {
 
         if ($count -le 1 -and -not [string]::IsNullOrEmpty($mainName)) {
             & $VirtualDesktopExe /Quiet /GetDesktop:0 /Name:$mainName 2>$null
-            & $VirtualDesktopExe /Quiet /New 2>$null
-            $newIndex = $LASTEXITCODE
-            if ($newIndex -ge 0) {
-                & $VirtualDesktopExe /Quiet /GetDesktop:$newIndex /Name:$DesktopName 2>$null
-            }
-            else {
-                & $VirtualDesktopExe /Quiet '/GetDesktop:*last*' /Name:$DesktopName 2>$null
-            }
+        }
+
+        # Always create a new desktop instead of renaming the last existing one:
+        # renaming could silently move a desktop the user already owns.
+        & $VirtualDesktopExe /Quiet /New 2>$null
+        if ($LASTEXITCODE -ge 0) {
+            & $VirtualDesktopExe /Quiet '/GetDesktop:*last*' /Name:$DesktopName 2>$null
         }
         else {
-            & $VirtualDesktopExe /Quiet '/GetDesktop:*last*' /Name:$DesktopName 2>$null
+            Write-Log "Could not create a new virtual desktop (exit $LASTEXITCODE)"
         }
     }
 
